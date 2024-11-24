@@ -186,6 +186,11 @@ public class CalculatorMenu extends javax.swing.JFrame {
 
         calculateBTN.setText("Calculate");
         calculateBTN.setEnabled(false);
+        calculateBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateBTNActionPerformed(evt);
+            }
+        });
 
         displayTA.setEditable(false);
         displayTA.setColumns(20);
@@ -721,6 +726,59 @@ public class CalculatorMenu extends javax.swing.JFrame {
         }
         displayTA.append(potentialMatches + " potential match(es) found.");
     }//GEN-LAST:event_searchTFKeyReleased
+
+    private void calculateBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateBTNActionPerformed
+        // TODO add your handling code here:
+        /* compute spending recommendations based on the share of each 
+         category of cost item and the ringfenced amounts to spend */
+        // 1. calculate the representation of each cost category
+        int subsidyCount, campaignCount, programmeCount, total;
+        double subsidyShare, campaignShare, programmeShare;
+        final String DBL_FORMAT = "%.2f";
+        subsidyCount = 0;
+        campaignCount = 0;
+        programmeCount = 0;
+        displayTA.setText("");
+        for (Cost iterator : calcList) {
+            if (iterator instanceof Subsidy)
+                subsidyCount++;
+            else if (iterator instanceof Campaign)
+                campaignCount++;
+            else
+                programmeCount++;
+        }
+        total = subsidyCount + campaignCount + programmeCount;
+        System.out.println("Total: " + total);
+        subsidyShare = Double.parseDouble(String.format(DBL_FORMAT, (Double.valueOf(subsidyCount) / Double.valueOf(total)) * 100));
+        campaignShare = Double.parseDouble(String.format(DBL_FORMAT, (Double.valueOf(campaignCount) / Double.valueOf(total)) * 100));
+        programmeShare = Double.parseDouble(String.format(DBL_FORMAT,(Double.valueOf(programmeCount) / Double.valueOf(total)) * 100));
+        displayTA.setText("Cost Items by Quantity: \n" +
+                "Subsidies: " + Double.parseDouble(String.format(DBL_FORMAT, subsidyShare)) + "%\n" +
+                "Campaigns: " + Double.parseDouble(String.format(DBL_FORMAT, campaignShare)) + "%\n" +
+                "Programmes: " + Double.parseDouble(String.format(DBL_FORMAT, programmeShare)) + "%\n\n");
+        // 2. compute how funds are distributed across cost categories
+        double subsidyFunds, campaignFunds, programmeFunds, totalFunds;
+        subsidyFunds = 0;
+        campaignFunds = 0;
+        programmeFunds = 0;
+        totalFunds = 0;
+        for (Cost iterator: calcList) {
+            if (iterator instanceof Subsidy)
+                subsidyFunds += iterator.getAmount();
+            else if (iterator instanceof Campaign)
+                campaignFunds += iterator.getAmount();
+            else
+                programmeFunds += iterator.getAmount();
+            totalFunds += iterator.getAmount();
+        }
+        displayTA.append("Distribution of Funds: \n" +
+                "Subsidies: " + "€" + subsidyFunds + " - " + Double.parseDouble(String.format(DBL_FORMAT, (subsidyFunds / totalFunds) * 100)) + "%" + "\n" +
+                "Campaigns: " + "€" + campaignFunds + " - " + Double.parseDouble(String.format(DBL_FORMAT, (campaignFunds / totalFunds) * 100)) + "%" + "\n" +
+                "Programmes: " + "€" + programmeFunds + " - " + Double.parseDouble(String.format(DBL_FORMAT, (programmeFunds / totalFunds) * 100)) + "%" + "\n");
+        // 3. calculate how many different beneficiaries, managers and departments
+        // avail of funding
+        
+    }//GEN-LAST:event_calculateBTNActionPerformed
     
     /**
      * @param args the command line arguments
