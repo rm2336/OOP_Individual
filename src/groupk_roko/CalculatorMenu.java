@@ -264,7 +264,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
             }
         });
 
-        countLBL.setText("N/A");
+        countLBL.setText("0/0");
 
         searchTF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -662,6 +662,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
         {
             System.out.println("Searching by beneficiary...");
             for (Cost searchCost : calcList) {
+                if (searchCost instanceof Subsidy)
                 if ((((Subsidy)searchCost).getBeneficiary()).toLowerCase().contains(searchTF.getText().toLowerCase())) {
                     potentialMatches++;
                     displayTA.append(index + " " + searchCost.getName() + " Beneficiary: " + (((Subsidy)searchCost).getBeneficiary()) + "\n");
@@ -673,6 +674,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
         {
             System.out.println("Searching by lump sum...");
             for (Cost searchCost : calcList) {
+                if (searchCost instanceof Subsidy)
                 if (String.valueOf(((Subsidy)searchCost).isIsLumpSum()).toLowerCase().contains(searchTF.getText().toLowerCase())) {
                     potentialMatches++;
                     displayTA.append(index + " " + searchCost.getName() + " Lump Sum: " + (((Subsidy)searchCost).isIsLumpSum()) + "\n");
@@ -684,6 +686,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
         {
             System.out.println("Searching by manager...");
             for (Cost searchCost : calcList) {
+                if (searchCost instanceof Campaign)
                 if (((Campaign)searchCost).getManager().toLowerCase().contains(searchTF.getText().toLowerCase())) {
                     potentialMatches++;
                     displayTA.append(index + " " + searchCost.getName() + " Manager: " + (((Campaign)searchCost).getManager()) + "\n");
@@ -695,6 +698,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
         {
             System.out.println("Searching by end date...");
             for (Cost searchCost : calcList) {
+                if (searchCost instanceof Campaign)
                 if (((Campaign)searchCost).getEndDate().toLowerCase().contains(searchTF.getText().toLowerCase())) {
                     potentialMatches++;
                     displayTA.append(index + " " + searchCost.getName() + " End Date: " + (((Campaign)searchCost).getEndDate()) + "\n");
@@ -706,6 +710,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
         {
             System.out.println("Searching by department...");
             for (Cost searchCost : calcList) {
+                if (searchCost instanceof Programme)
                 if (((Programme)searchCost).getDepartment().toLowerCase().contains(searchTF.getText().toLowerCase())) {
                     potentialMatches++;
                     displayTA.append(index + " " + searchCost.getName() + " Department: " + (((Programme)searchCost).getDepartment()) + "\n");
@@ -717,6 +722,7 @@ public class CalculatorMenu extends javax.swing.JFrame {
         {
             System.out.println("Searching by recurrency...");
             for (Cost searchCost : calcList) {
+                if (searchCost instanceof Programme)
                 if (String.valueOf(((Programme)searchCost).isIsRecurrent()).toLowerCase().contains(searchTF.getText().toLowerCase())) {
                     potentialMatches++;
                     displayTA.append(index + " " + searchCost.getName() + " Recurrent: " + (((Programme)searchCost).getDepartment()) + "\n");
@@ -777,7 +783,61 @@ public class CalculatorMenu extends javax.swing.JFrame {
                 "Programmes: " + "€" + programmeFunds + " - " + Double.parseDouble(String.format(DBL_FORMAT, (programmeFunds / totalFunds) * 100)) + "%" + "\n");
         // 3. calculate how many different beneficiaries, managers and departments
         // avail of funding
-        
+        // a loop will populate the below three array lists, then another loop
+        // will match the contents of the array lists with the main one via an inner loop and
+        // add the disparate sums together
+//        ArrayList <Subsidy> subsidyList = new ArrayList <Subsidy>();
+//        ArrayList <Campaign> campaignList = new ArrayList <Campaign>();
+//        ArrayList <Programme> programmeList = new ArrayList <Programme>();
+//        double[] beneficiaryFunds, managerFunds, departmentFunds;
+//        beneficiaryFunds = new double[100];
+//        managerFunds = new double[100];
+//        departmentFunds = new double[100];
+//        int loopIndex = 0;
+//        for (Cost iterator: calcList) {
+//            if (iterator instanceof Subsidy)
+//                subsidyList.add((Subsidy)iterator);
+//            else if (iterator instanceof Campaign)
+//                campaignList.add((Campaign)iterator);
+//            else
+//                programmeList.add((Programme)iterator);
+//        }
+//        for (Subsidy computeSubsidy: subsidyList) {
+//            beneficiaryFunds[loopIndex] = 0;
+//            for (Cost iterator: calcList) {
+//                if (iterator instanceof Subsidy)
+//                    if (((Subsidy) iterator).getBeneficiary().equals(computeSubsidy.getBeneficiary())) {
+//                        beneficiaryFunds[loopIndex] += computeSubsidy.getAmount();
+//                    }
+//                loopIndex++;
+//            }
+//        for (Campaign computeCampaign: campaignList) {
+//            managerFunds[loopIndex] = 0;
+//            for (Cost iterator: calcList) {
+//                if (iterator instanceof Campaign)
+//                    if (((Campaign) iterator).getManager().equals(computeCampaign.getManager())) {
+//                        managerFunds[loopIndex] += computeCampaign.getAmount();
+//                    }
+//                loopIndex++;
+//            }
+//        }
+//        for (Programme computeProgramme: programmeList) {
+//            departmentFunds[loopIndex] = 0;
+//            for (Cost iterator: calcList) {
+//                if (iterator instanceof Programme)
+//                    if (((Programme) iterator).getDepartment().equals(computeProgramme.getDepartment())) {
+//                        departmentFunds[loopIndex] += computeProgramme.getAmount();
+//                    }
+//                loopIndex++;
+//                }
+//            }
+//        }
+//        // display results
+//        loopIndex = 0;
+//        for (Subsidy iterator: subsidyList) {
+//            displayTA.append("Beneficiary: " + subsidyList.get(loopIndex).getBeneficiary() + "\n");
+//            loopIndex++;
+//        }
     }//GEN-LAST:event_calculateBTNActionPerformed
     
     /**
